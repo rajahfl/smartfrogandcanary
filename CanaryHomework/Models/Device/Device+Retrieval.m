@@ -23,7 +23,7 @@
     Device *device = [[managedObjectContext executeFetchRequest:fetchRequest error:NULL] firstObject];
     if (device == nil && createIfNeeded) {
         device = [[Device alloc] initWithEntity:entity insertIntoManagedObjectContext:managedObjectContext];
-        device.deviceID = deviceID;
+        device.deviceID = deviceID.description;
     }
     return device;
 }

@@ -8,13 +8,14 @@
 
 #import "ViewController.h"
 #import "DetailViewController.h"
-#import "CoreDataController.h"
 #import "Device+CoreDataProperties.h"
+#import "GetDevicesViewModel.h"
 
 @interface ViewController ()
 
 @property(nonatomic, retain) UITableView *tableView;
 @property(nonatomic, retain) UILayoutGuide *safeArea;
+@property(nonatomic, strong) GetDevicesViewModel *viewModel;
 
 @end
 
@@ -29,6 +30,22 @@
     // Do any additional setup after loading the view.
     self.safeArea = self.view.layoutMarginsGuide;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.viewModel = [[GetDevicesViewModel alloc] init];
+
+    __weak ViewController *weakSelf = self;
+    [self.viewModel getAllDevicesWithCompletionHandler:^(NSArray * _Nonnull devices, NSError * _Nonnull error) {
+        NSLog(@"devices: %@", devices.description);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+        
+        if (nil != error) {
+            NSLog(@"error:%@", error.description);
+        }
+    }];
+    
     [self setupTableView];
 }
 
@@ -50,12 +67,15 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-    cell.textLabel.text = @"data";
+    
+    Device *device = [self.viewModel.devices objectAtIndex:[indexPath row]];
+    
+    cell.textLabel.text = device.name;
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return self.viewModel.devices.count;
 }
 
 #pragma mark UITableView Delegate 

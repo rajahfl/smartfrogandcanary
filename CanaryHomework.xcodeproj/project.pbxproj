@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E9502A42749B79C003133EE /* GetDevicesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9502A32749B79C003133EE /* GetDevicesViewModel.m */; };
 		B21CD57B233A9320006994CA /* APICLient.m in Sources */ = {isa = PBXBuildFile; fileRef = B21CD57A233A9320006994CA /* APICLient.m */; };
 		B21CD582233AAE02006994CA /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B21CD581233AAE02006994CA /* DetailViewController.m */; };
 		B21CD585233AB8B4006994CA /* CoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = B21CD584233AB8B4006994CA /* CoreDataController.m */; };
@@ -28,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9E9502A22749B79C003133EE /* GetDevicesViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetDevicesViewModel.h; sourceTree = "<group>"; };
+		9E9502A32749B79C003133EE /* GetDevicesViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetDevicesViewModel.m; sourceTree = "<group>"; };
 		B21CD57A233A9320006994CA /* APICLient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APICLient.m; sourceTree = "<group>"; };
 		B21CD57C233A932E006994CA /* APIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIClient.h; sourceTree = "<group>"; };
 		B21CD57E233A93F3006994CA /* Keys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
@@ -76,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E9502A12749B757003133EE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9E9502A22749B79C003133EE /* GetDevicesViewModel.h */,
+				9E9502A32749B79C003133EE /* GetDevicesViewModel.m */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		B21CD579233A92EF006994CA /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +174,7 @@
 			children = (
 				B28912CC233BA98C00F0C3C5 /* Util */,
 				B28912CA233BA70400F0C3C5 /* Models */,
+				9E9502A12749B757003133EE /* ViewModels */,
 				B21CD57D233A93DA006994CA /* Suoporting Files */,
 				B21CD579233A92EF006994CA /* API */,
 				B2E709582334173B009B864F /* CoreData */,
@@ -263,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2E7095423341732009B864F /* Reading+CoreDataClass.m in Sources */,
+				9E9502A42749B79C003133EE /* GetDevicesViewModel.m in Sources */,
 				B2E709352333FF38009B864F /* ViewController.m in Sources */,
 				B2AC60DC233540C300A5823F /* CoreDataManager.m in Sources */,
 				B2E7093B2333FF38009B864F /* CanaryHomework.xcdatamodeld in Sources */,

@@ -94,6 +94,7 @@
     Device *device = [self.viewModel.devices objectAtIndex:[indexPath row]];    
     DeviceDetailViewModel *ddvm = [DeviceDetailViewModel deviceDetailViewModelWithDeviceId:device.deviceID];
     DetailViewController *dvc = [DetailViewController deviceDetailViewController:ddvm];
+    dvc.title = device.name;
     
     [self.navigationController pushViewController:dvc animated:YES];
 }

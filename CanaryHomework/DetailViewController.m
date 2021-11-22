@@ -29,7 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"About Device";
     
     self.safeArea = self.view.layoutMarginsGuide;
     self.view.backgroundColor = [UIColor whiteColor];
@@ -70,22 +69,29 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-    Reading *reading = [self.viewModel.readings objectAtIndex:[indexPath row]];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", reading.type, reading.value.stringValue];
+    
+    if (nil == self.viewModel.readings || self.viewModel.readings.count == 0) {
+        cell.textLabel.text = @"No readings for this device";
+    } else {
+        Reading *reading = [self.viewModel.readings objectAtIndex:[indexPath row]];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", reading.type, reading.value.stringValue];
+    }
+    
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.viewModel.readings.count;
+    if (nil == self.viewModel.readings || self.viewModel.readings.count == 0) {
+        return 1;
+    } else {
+        return self.viewModel.readings.count;
+    }
 }
 
 #pragma mark UITableView Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailViewController *dc = [DetailViewController new];
-    [self.navigationController pushViewController:dc animated:YES];
 }
-
 
 @end

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^CoreDataControllerCompletionBlock)(BOOL completed, BOOL success, NSArray *objects);
+typedef void(^CoreDataControllerCompletionBlock)(BOOL completed, BOOL success, NSArray * _Nullable objects, NSError * _Nullable error);
 
 @interface CoreDataController : NSObject
 

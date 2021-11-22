@@ -28,7 +28,7 @@
 - (void) getAllDevicesWithCompletionHandler:(GetDevicesCompletionHandler)completionHandler {
     __weak GetDevicesViewModel *weakSelf = self;
     
-    [[CoreDataController sharedCache] getAllDevices:^(BOOL completed, BOOL success, NSArray * _Nonnull objects) {
+    [[CoreDataController sharedCache] getAllDevices:^(BOOL completed, BOOL success, NSArray * _Nonnull objects, NSError *error) {
         if (success) {
             weakSelf.devices = objects;
             completionHandler(objects, nil);

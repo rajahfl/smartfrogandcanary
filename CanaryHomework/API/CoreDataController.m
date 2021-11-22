@@ -32,7 +32,7 @@
         _managedObjectContext = coreDataManager.managedObjectContext;
         _reloadQueue = dispatch_queue_create("is.canary.CacheController.reloadQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_sync(_reloadQueue, ^
-        {
+                      {
             _privateObjectContext = [coreDataManager createContextWithConcurrencyType:NSPrivateQueueConcurrencyType];
         });
         
@@ -47,7 +47,7 @@
     static CoreDataController *sharedCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
-    {
+                  {
         sharedCache = [self new];
     });
     return sharedCache;
@@ -62,15 +62,16 @@
                     [weakSelf insertObjectsWithDictionaries:responseObject withCreationBlock:^(NSDictionary *dictionary, NSManagedObjectContext *insertContext) {
                         return [Device deviceFromDictionary:dictionary managedObjectContext:insertContext];
                     }
-                    completionBlock:^(NSArray *objects, NSError *error) {
+                                            completionBlock:^(NSArray *objects, NSError *error) {
                         if (completionBlock != nil){
-                            completionBlock(YES, YES, objects);
+                            NSError *error = [NSError errorWithDomain:@"" code:99 userInfo:nil];
+                            completionBlock(YES, YES, objects, error);
                         }
                     }];
                 }
                 else if ( completionBlock != nil ) {
                     NSArray *errorsArray = responseObject;
-                    completionBlock(YES, NO, errorsArray);
+                    completionBlock(YES, NO, errorsArray, nil);
                 }
             });
         }];
@@ -81,21 +82,24 @@
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.reloadQueue, ^ {
         [[APIClient sharedClient] getDevice:deviceID readingsWithCompletionBlock:^(BOOL success, id responseObject) {
+            NSMutableArray *newReadings = [NSMutableArray array];
             if (success) {
                 Device *device = [Device deviceWithID:deviceID managedObjectContext:self.privateObjectContext createIfNeeded:YES];
                 [device removeReadings:device.readings];
                 [weakSelf insertObjectsWithDictionaries:responseObject withCreationBlock:^NSManagedObject *(NSDictionary *dictionary, NSManagedObjectContext *insertContext) {
-                    return [Reading readingFromDictionary:dictionary forDevice:deviceID managedObjectContext:insertContext];
-
-                } completionBlock:^(NSArray *objects, NSError *error) {
+                    Reading *reading = [Reading readingFromDictionary:dictionary forDevice:deviceID managedObjectContext:insertContext];
+                    [newReadings addObject:reading];
+                    return reading;
                     
+                } completionBlock:^(NSArray *objects, NSError *error) {
+                    completionBlock(true, true, newReadings, error);
                 }];
             }
         }];
     });
 }
 - (void)insertObjectsWithDictionaries:(NSArray *)objectDictionaries withCreationBlock:(NSManagedObject *(^)(NSDictionary *, NSManagedObjectContext *))creationBlock completionBlock:(void(^)(NSArray *, NSError *))completionBlock {
-
+    
     NSManagedObjectContext *insertContext = self.privateObjectContext;
     NSMutableArray *insertedObjects = [NSMutableArray new];
     
@@ -114,7 +118,7 @@
     
     if ( error != nil )
     {
-    NSLog(@"Error on saving: %@", error);
+        NSLog(@"Error on saving: %@", error);
     }
     
     if ( completionBlock != nil )

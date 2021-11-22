@@ -43,6 +43,14 @@
         
         if (nil != error) {
             NSLog(@"error:%@", error.description);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.viewModel getAllDevicesWithCompletionHandler:^(NSArray * _Nullable devices, NSError * _Nullable error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.tableView reloadData];
+                    });
+                }];
+            });
         }
     }];
     
@@ -81,8 +89,13 @@
 #pragma mark UITableView Delegate 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DetailViewController *dc = [DetailViewController new];
-    [self.navigationController pushViewController:dc animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    Device *device = [self.viewModel.devices objectAtIndex:[indexPath row]];    
+    DeviceDetailViewModel *ddvm = [DeviceDetailViewModel deviceDetailViewModelWithDeviceId:device.deviceID];
+    DetailViewController *dvc = [DetailViewController deviceDetailViewController:ddvm];
+    
+    [self.navigationController pushViewController:dvc animated:YES];
 }
 
 @end

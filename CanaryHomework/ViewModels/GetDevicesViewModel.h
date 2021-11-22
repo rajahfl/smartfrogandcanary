@@ -12,7 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^GetDevicesCompletionHandler)(NSArray *_Nullable devices, NSError *_Nullable error);
 
-@interface GetDevicesViewModel : NSObject
+@protocol GetDevicesProtocol <NSObject>
+
+@required
+
+- (void) getAllDevicesWithCompletionHandler:(GetDevicesCompletionHandler)completionHandler;
+
+@end
+
+@interface GetDevicesViewModel : NSObject <GetDevicesProtocol>
 
 @property (nonatomic, strong) NSArray *devices;
 
